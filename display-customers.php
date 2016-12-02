@@ -1,6 +1,20 @@
 <?php
+require_once('config.php');
+$connection = mysqli_connect(DBHOST, DBUSER, DBPASS, DBNAME);
 
+//handling connection errors
+if (mysqli_connect_errno()) {
+	die(mysqli_connect_error());
+}
 
+//sql statements to display content from tables
+ $catSql = "SELECT CategoryName FROM categories ORDER BY CategoryName asc";
+ $catResult = mysqli_query($connection, $catSql);
+ $imprintSql = "SELECT Imprint FROM imprints ORDER BY Imprint asc";
+ $imprintResult = mysqli_query($connection, $imprintSql);
+ $custSql = "SELECT * FROM customers ORDER BY lastname asc";
+ $custResult = mysqli_query($connection, $custSql);
+ 
 
 ?>
 
@@ -52,7 +66,25 @@
                <th>University</th>
                <th>City</th>
              </tr>
+				<?php 
+						if ($custResult = mysqli_query($connection, $custSql)) {
+							while($row = mysqli_fetch_assoc($custResult)){
+							echo '<tr><td>';
+							echo $row['FirstName'];
+							echo ' ';
+							echo $row['LastName'];
+							echo '</td><td>';
+							echo $row['email'];
+							echo '</td><td>';
+							echo $row['university'];
+							echo '</td><td>';
+							echo $row['city'];
+							echo '</td></tr>';
+							
+							}
+						}
 
+					?>
            </table>
          </div>           
       </div>
@@ -61,14 +93,34 @@
          <div class="panel panel-info spaceabove">
             <div class="panel-heading"><h4>Categories</h4></div>
                <ul class="nav nav-pills nav-stacked">
+					<?php 
+						if ($catResult = mysqli_query($connection, $catSql)) {
+							while($row = mysqli_fetch_assoc($catResult)){
+							echo "<li>";					
+							echo "<a href='#'>";
+							echo $row['CategoryName'];
+							echo "</a></li>";
+							}
+						}
 
+					?>
                </ul> 
          </div>
          
          <div class="panel panel-info">
             <div class="panel-heading"><h4>Imprints</h4></div>
             <ul class="nav nav-pills nav-stacked">
+				<?php 
+						if ($imprintResult = mysqli_query($connection, $imprintSql)) {
+							while($row = mysqli_fetch_assoc($imprintResult)){
+							echo "<li>";	
+							echo "<a href='#'>";
+							echo $row['Imprint'];
+							echo "</a></li>";
+							}
+						}
 
+					?>
             </ul>
          </div>         
       </div>  <!-- end left navigation rail --> 
